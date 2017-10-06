@@ -324,14 +324,25 @@ var _ohanhi$elm_native_ui$Native_NativeUi = (function () {
    * program starts running
    */
   function makeComponent(impl, onAppReady, flags) {
-    return React.createClass({
-      getInitialState: function getInitialState() {
-        return {};
-      },
+    return class extends React.Component {
+      onAppReady = onAppReady;
 
-      onAppReady: onAppReady,
+      renderer = (onMessage, initialModel) => {
+        this.eventNode.tagger = onMessage;
+        this.updateModel(initialModel);
+        return this.updateModel;
+      };
 
-      componentDidMount: function componentDidMount() {
+      updateModel = (model) => {
+        this.setState({ model: model });
+      };
+
+      constructor(props) {
+        super(props);
+        this.state = {};
+      }
+
+      componentDidMount() {
         this.eventNode = { tagger: function() {}, parent: undefined };
 
         this._app = _elm_lang$core$Native_Platform.initialize(
@@ -344,26 +355,16 @@ var _ohanhi$elm_native_ui$Native_NativeUi = (function () {
         if (typeof this.onAppReady === "function") {
           this.onAppReady(this._app);
         }
-      },
+      }
 
-      renderer: function renderer(onMessage, initialModel) {
-        this.eventNode.tagger = onMessage;
-        this.updateModel(initialModel);
-        return this.updateModel;
-      },
-
-      updateModel: function updateModel(model) {
-        this.setState({ model: model });
-      },
-
-      render: function render() {
+      render() {
         // There won't be a model to render right away so we'll check that it
         // exists before trying to call the view function
         return typeof this.state.model !== 'undefined' ?
           renderTree(impl.view(this.state.model), this.eventNode, 0) :
           null;
       }
-    });
+    };
   }
 
   /**
