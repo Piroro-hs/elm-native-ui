@@ -16,10 +16,8 @@
         "NativeUi.Events",
         "NativeUi.AsyncStorage",
         "NativeUi.ListView",
-        "NativeUi.NavigationExperimental",
         "NativeApi.Animated",
         "NativeApi.Dimensions",
-        "NativeApi.NavigationStateUtil",
         "NativeApi.Platform",
         "NativeApi.StyleSheet",
         "NativeApi.PushNotificationIOS"
